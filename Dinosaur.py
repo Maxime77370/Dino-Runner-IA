@@ -17,7 +17,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption('Dino Runner')
 
 # Chargement du tileset (remplacez 'tileset.png' par le chemin de votre fichier tileset)
-tileset = pygame.image.load('dinosaur-tileset2.png').convert_alpha()
+tileset = pygame.image.load('assets/dinosaur-tileset2.png').convert_alpha()
 
 # Classe Dino
 class Dino(pygame.sprite.Sprite):
