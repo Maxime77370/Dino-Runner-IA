@@ -41,10 +41,11 @@ class Menu:
 
         self.font = pygame.font.SysFont(None, 40)
         self.menu_options = [
-            {"id": 0, "text": "Nombre de neurones par couche", "min": 1, "max": 100, "value": 2, "type": int},
-            {"id": 1, "text": "Nombre de couches", "min": 0, "max": 100, "value": 1, "type": int},
-            {"id": 2, "text": "Nombre de générations", "min": 1, "max": 500, "value": 10, "type": int},
-            {"id": 3, "text": "Nombre d'enfants par génération", "min": 1, "max": 500, "value": 50, "type": int},
+            {"id": 0, "text": "Nombre de neurones par couche", "min": 1, "max": 100, "value": 4, "type": int},
+            {"id": 1, "text": "Nombre de couches", "min": 0, "max": 100, "value": 3, "type": int},
+            {"id": 2, "text": "Nombre de générations", "min": 1, "max": 500, "value": 100, "type": int},
+            {"id": 3, "text": "Nombre d'enfants par génération", "min": 1, "max": 500, "value": 40, "type": int},
+            {"id": 4, "text": "Nombre d'enfants identique", "min": 1, "max": 20, "value": 4, "type": int},
             {"id": 4, "text": "Taux de mutation", "min": 0, "max": 1, "value": 0.5, "type": float},
             {"id": 5, "text": "Commencer le jeu", "action": self.start_game, "type": "function"}
         ]
@@ -73,7 +74,7 @@ class Menu:
 
                     # Check if the "Commencer le jeu" button is clicked
                     if self.start_button_rect.collidepoint(mouse_pos):
-                        self.menu_options[5]["action"]()
+                        self.menu_options[6]["action"]()
 
             self.Draw()
             self.clock.tick(self.speed)
@@ -135,7 +136,12 @@ class Menu:
         print (f"Nombre de générations: {self.menu_options[2]['value']}")
         print (f"Nombre d'enfants par génération: {self.menu_options[3]['value']}")
         print (f"Taux de mutation: {self.menu_options[4]['value']}")
-        machine_learning = LogicSimulation(self.menu_options[2]["value"], self.menu_options[3]["value"], [2] + [self.menu_options[0]["value"] for i in range(self.menu_options[1]["value"])] + [1], self.menu_options[4]["value"])
+        machine_learning = LogicSimulation(
+            generations_num=self.menu_options[2]["value"], 
+            population_num=self.menu_options[3]["value"], 
+            neron_couche=[4] + [self.menu_options[0]["value"] for i in range(self.menu_options[1]["value"])] + [1], 
+            population_same_num=self.menu_options[4]["value"], 
+            mutation_rate=self.menu_options[5]["value"])
         game = Game(machine_learning)
         game.run()
 

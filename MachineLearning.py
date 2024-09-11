@@ -1,10 +1,11 @@
 import copy
 import random as rd
 from matplotlib import pyplot as plt
+import math as mt
 
 class Ml:
 
-    def __init__(self, connection = None, neron_weight = None, neron_couche = [3,3,1], mutation_rate = 0.1):
+    def __init__(self, connection = None, neron_weight = None, neron_couche = [3,3,1], mutation_rate = 0.1, filename = None):
         """
         Initialise les paramètres du réseau de neurones.
         - connection: Matrice de connexion entre les neurones.
@@ -22,6 +23,10 @@ class Ml:
         self.neron_value = {} # Valeurs des neurones
 
 
+        # Chargement des connexions et des poids des neurones à partir d'un fichier CSV
+        if filename is not None:
+            self.load_csv(filename)
+        # Initialisation des matrices de connexion et poids
         if self.connection is None or self.neron_weight is None:
             # Initialisation des matrices de connexion et poids
             self.init_connection_and_weight()
@@ -70,6 +75,10 @@ class Ml:
                     # Parcours des neurones de la couche actuelle (entrées)
                     # Calcul de la valeur du neurone de sortie en fonction des valeurs des neurones d'entrée, de la connexion et du poids
                     self.neron_value[str(output)+str(couche+1)] += self.neron_value[str(enter)+str(couche)]*self.connection[str(couche)+str(enter)+str(output)] * self.neron_weight[str(enter)+str(couche)]
+
+        # use sigmoid function to normalize the output
+        for output in range(self.neron_couche[-1]):
+            self.neron_value[str(output)+str(len(self.neron_couche)-1)] = sigmoid(self.neron_value[str(output)+str(len(self.neron_couche)-1)])
 
         return [self.neron_value[str(i)+str(len(self.neron_couche)-1)] for i in range(self.neron_couche[-1])]
 
@@ -193,6 +202,63 @@ class Ml:
 
         self.mutation_rate = mutation_rate
 
+    def save_csv(self, filename):
+        """
+        Enregistre les connexions et les poids des neurones dans un fichier CSV.
+        Args:
+            filename (str): Le nom du fichier CSV dans lequel les connexions et les poids des neurones seront enregistrés.
+        Returns:
+            None
+        """
+
+        filename = "save/" + filename
+
+        with open(filename, "w") as file:
+            for key, value in self.connection.items():
+                file.write(f"{key},{value}\n")
+            for key, value in self.neron_weight.items():
+                file.write(f"{key},{value}\n")
+    
+    def load_csv(self, filename):
+        """
+        Charge les connexions et les poids des neurones à partir d'un fichier CSV.
+        Args:
+            filename (str): Le nom du fichier CSV à partir duquel les connexions et les poids des neurones seront chargés.
+        Returns:
+            None
+        """
+
+        filename = "save/" + filename
+
+        self.connection = {}
+        self.neron_weight = {}
+
+        with open(filename, "r") as file:
+            for line in file:
+                key, value = line.strip().split(",")
+                print(key, value)
+                if len(key) == 3:
+                    self.connection[key] = float(value)
+                elif len(key) == 2:
+                    self.neron_weight[key] = float(value)
+
+
+def sigmoid(x, min=-1, max=1):
+    """
+    Calcule la fonction sigmoïde d'une valeur donnée.
+    Args:
+        x (float): La valeur pour laquelle la fonction sigmoïde doit être calculée.
+        min (float): La valeur minimale de la fonction sigmoïde.
+        max (float): La valeur maximale de la fonction sigmoïde.
+    Returns:
+        float: La valeur de la fonction sigmoïde.
+    """
+    if -709 > x:
+        x = -709
+    if x > 709:
+        x = 709
+    return min + (max - min) / (1 + mt.exp(-x))
+
 if __name__ == "__main__":
     """
     Test de la classe Ml
@@ -227,4 +293,5 @@ if __name__ == "__main__":
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+    ml.save_csv("ml.csv")
     pygame.quit()
