@@ -1,5 +1,6 @@
 import pygame
 import Logique
+import asyncio
 
 # Dimensions de la fenêtre
 SCREEN_WIDTH = 1000
@@ -176,7 +177,7 @@ class Game:
                 self.all_sprites.add(obstacle)
                 self.obstacles.append(obstacle)
 
-    def run(self):
+    async def run(self):
         last_update = pygame.time.get_ticks()
         running = True
         while running:
@@ -213,6 +214,8 @@ class Game:
                 screen.blit(self.generation_text, (10, 40))
 
                 pygame.display.flip()
+                await asyncio.sleep(0)  # Very important, and keep it 0
+
 
     def restart(self):
         self.all_sprites.empty()
@@ -230,5 +233,6 @@ class Game:
 
 if __name__ == '__main__':
     machine_learning = Logique.LogicSimulation(100,200)
-    game = Game(machine_learning)
+    game = asyncio.run(Game(machine_learning))
     game.run()
+    
