@@ -18,7 +18,7 @@ jobs:
             python -m pip install pygbag
             echo "Successfully installed pygbag"
             echo "Attempting to build the game"
-            python -m pygbag --build $GITHUB_WORKSPACE/main.py --output Dino-Runner-IA/build/web
+            python -m pygbag --build $GITHUB_WORKSPACE/main.py
             echo "Successfully built the game and compiled to WebAssembly"
             ls Dino-Runner-IA/build/web
 
