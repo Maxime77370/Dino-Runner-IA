@@ -1,4 +1,4 @@
-name: Build Dino Runner IA
+name: Dino-Runner-IA
 on:
   push:
     branches:
@@ -7,25 +7,22 @@ on:
 
 jobs:
   build-pygbag:
-    name: Dino Runner IA
+    name: Dino-Runner-IA
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Install pygbag
+    - uses: actions/checkout@v2
+    - name: Checkout
       run: |
-        echo "Attempting to install pygbag"
-        python -m pip install pygbag || { echo "pygbag installation failed"; exit 1; }
-        echo "Successfully installed pygbag"
-    - name: Build the game
-      run: |
-        echo "Attempting to build the game"
-        python -m pygbag --build $GITHUB_WORKSPACE/main.py || { echo "Build failed"; exit 1; }
-        echo "Successfully built the game and compiled to WebAssembly"
-    - name: "Upload to GitHub pages branch gh-pages"
+            echo "Attempting to install pygbag"
+            python -m pip install pygbag
+            echo "Successfully installed pygbag"
+            echo "Attempting to build the game"
+            python -m pygbag --build $GITHUB_WORKSPACE/main.py
+            echo "Successfully build the game and complied to WebAssembly"
+
+    - name : "Upload to GitHub pages branch gh-pages"
       uses: JamesIves/github-pages-deploy-action@4.1.7
       with:
         branch: gh-pages
-        folder: build/web
-        token: ${{ secrets.GITHUB_TOKEN }}
-
+        folder: Dino-Runner-IA/build/web
