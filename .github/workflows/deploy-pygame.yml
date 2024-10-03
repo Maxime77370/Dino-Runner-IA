@@ -20,7 +20,6 @@ jobs:
             echo "Attempting to build the game"
             python -m pygbag --build $GITHUB_WORKSPACE/main.py
             echo "Successfully built the game and compiled to WebAssembly"
-            ls Dino-Runner-IA/build/web
 
     - name: "Upload to GitHub pages branch gh-pages"
       uses: JamesIves/github-pages-deploy-action@4.1.7
