@@ -11,17 +11,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3  # Updated from v2 to v3
+    - uses: actions/checkout@v3
     - name: Checkout
       run: |
         echo "Attempting to install pygbag"
-        python -m pip install pygbag
+        python -m pip install pygbag || { echo "pygbag installation failed"; exit 1; }
         echo "Successfully installed pygbag"
         echo "Attempting to build the game"
-        python -m pygbag --build $GITHUB_WORKSPACE/main.py --gui
-        echo "Successfully build the game and compiled to WebAssembly"
+        python -m pygbag --build $GITHUB_WORKSPACE/main.py --gui || { echo "Build failed"; exit 1; }
+        echo "Successfully built the game and compiled to WebAssembly"
 
-    - name : "Upload to GitHub pages branch gh-pages"
+    - name: "Upload to GitHub pages branch gh-pages"
       uses: JamesIves/github-pages-deploy-action@4.1.7
       with:
         branch: gh-pages
